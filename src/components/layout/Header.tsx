@@ -46,7 +46,7 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
             <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl hero-gradient flex items-center justify-center shadow-soft">
-              <span className="text-primary-foreground font-heading font-bold text-lg lg:text-xl">M</span>
+              <span className="text-primary-foreground font-heading font-bold text-lg lg:text-xl">Muhazi dental clinical </span>
             </div>
             <div className="flex flex-col">
               <span className="font-heading font-bold text-lg lg:text-xl text-foreground">Muhazi</span>
