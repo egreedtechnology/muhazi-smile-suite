@@ -13,6 +13,7 @@ import Contact from "./pages/Contact";
 import BookAppointment from "./pages/BookAppointment";
 import AdminLogin from "./pages/admin/AdminLogin";
 import Dashboard from "./pages/admin/Dashboard";
+import StaffManagement from "./pages/admin/StaffManagement";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/staff"
+              element={
+                <ProtectedRoute allowedRoles={["super_admin"]}>
+                  <StaffManagement />
                 </ProtectedRoute>
               }
             />
