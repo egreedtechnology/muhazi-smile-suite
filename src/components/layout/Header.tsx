@@ -45,9 +45,11 @@ const Header = () => {
         <div className="container-custom px-4 flex justify-between items-center h-16 lg:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl hero-gradient flex items-center justify-center shadow-soft">
-              <span className="text-primary-foreground font-heading font-bold text-lg lg:text-xl">Muhazi dental clinical </span>
-            </div>
+            <img 
+              src="/mdc-logo.jpg" 
+              alt="Muhazi Dental Clinic Logo" 
+              className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl object-cover shadow-soft"
+            />
             <div className="flex flex-col">
               <span className="font-heading font-bold text-lg lg:text-xl text-foreground">Muhazi</span>
               <span className="text-xs lg:text-sm text-muted-foreground -mt-0.5">Dental Clinic</span>

@@ -44,6 +44,63 @@ export type Database = {
         }
         Relationships: []
       }
+      appointment_requests: {
+        Row: {
+          appointment_id: string
+          created_at: string
+          id: string
+          patient_account_id: string
+          processed_at: string | null
+          processed_by: string | null
+          reason: string | null
+          request_type: string
+          requested_date: string | null
+          requested_time: string | null
+          status: string
+        }
+        Insert: {
+          appointment_id: string
+          created_at?: string
+          id?: string
+          patient_account_id: string
+          processed_at?: string | null
+          processed_by?: string | null
+          reason?: string | null
+          request_type: string
+          requested_date?: string | null
+          requested_time?: string | null
+          status?: string
+        }
+        Update: {
+          appointment_id?: string
+          created_at?: string
+          id?: string
+          patient_account_id?: string
+          processed_at?: string | null
+          processed_by?: string | null
+          reason?: string | null
+          request_type?: string
+          requested_date?: string | null
+          requested_time?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointment_requests_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointment_requests_patient_account_id_fkey"
+            columns: ["patient_account_id"]
+            isOneToOne: false
+            referencedRelation: "patient_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       appointments: {
         Row: {
           appointment_date: string
@@ -131,6 +188,89 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      gallery_media: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          display_order: number | null
+          id: string
+          is_active: boolean
+          media_type: string
+          media_url: string
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean
+          media_type?: string
+          media_url: string
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean
+          media_type?: string
+          media_url?: string
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Relationships: []
+      }
+      intake_forms: {
+        Row: {
+          form_data: Json
+          form_type: string
+          id: string
+          patient_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          submitted_at: string
+        }
+        Insert: {
+          form_data?: Json
+          form_type?: string
+          id?: string
+          patient_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          submitted_at?: string
+        }
+        Update: {
+          form_data?: Json
+          form_type?: string
+          id?: string
+          patient_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          submitted_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "intake_forms_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       invoice_items: {
         Row: {
@@ -238,6 +378,41 @@ export type Database = {
             foreignKeyName: "invoices_patient_id_fkey"
             columns: ["patient_id"]
             isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patient_accounts: {
+        Row: {
+          created_at: string
+          id: string
+          is_verified: boolean
+          patient_id: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_verified?: boolean
+          patient_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_verified?: boolean
+          patient_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_accounts_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: true
             referencedRelation: "patients"
             referencedColumns: ["id"]
           },
@@ -439,6 +614,73 @@ export type Database = {
           working_hours_start?: string | null
         }
         Relationships: []
+      }
+      treatment_records: {
+        Row: {
+          appointment_id: string | null
+          created_at: string
+          diagnosis: string | null
+          follow_up_date: string | null
+          id: string
+          medications_prescribed: string[] | null
+          patient_id: string
+          procedures_performed: string[] | null
+          treated_by: string | null
+          treatment_date: string
+          treatment_notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          appointment_id?: string | null
+          created_at?: string
+          diagnosis?: string | null
+          follow_up_date?: string | null
+          id?: string
+          medications_prescribed?: string[] | null
+          patient_id: string
+          procedures_performed?: string[] | null
+          treated_by?: string | null
+          treatment_date?: string
+          treatment_notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          appointment_id?: string | null
+          created_at?: string
+          diagnosis?: string | null
+          follow_up_date?: string | null
+          id?: string
+          medications_prescribed?: string[] | null
+          patient_id?: string
+          procedures_performed?: string[] | null
+          treated_by?: string | null
+          treatment_date?: string
+          treatment_notes?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "treatment_records_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "treatment_records_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "treatment_records_treated_by_fkey"
+            columns: ["treated_by"]
+            isOneToOne: false
+            referencedRelation: "staff"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
