@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Plus, Pencil, Trash2, Upload, Image, Video, Eye, X, Play } from "lucide-react";
+import { Plus, Pencil, Trash2, Upload, Image, Video, Eye, X, Play, Star, Images } from "lucide-react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -34,6 +34,7 @@ interface GalleryItem {
   thumbnail_url: string | null;
   display_order: number;
   is_active: boolean;
+  is_hero_slide: boolean;
 }
 
 const categories = [
@@ -63,7 +64,10 @@ const GalleryManagement = () => {
     media_type: "image",
     media_url: "",
     is_active: true,
+    is_hero_slide: false,
   });
+  const [bulkUploading, setBulkUploading] = useState(false);
+  const [bulkProgress, setBulkProgress] = useState({ current: 0, total: 0 });
 
   useEffect(() => {
     fetchMedia();
@@ -214,6 +218,7 @@ const GalleryManagement = () => {
       media_type: item.media_type,
       media_url: item.media_url,
       is_active: item.is_active,
+      is_hero_slide: item.is_hero_slide,
     });
     setIsDialogOpen(true);
   };
@@ -227,8 +232,39 @@ const GalleryManagement = () => {
       media_type: "image",
       media_url: "",
       is_active: true,
+      is_hero_slide: false,
     });
     setIsDialogOpen(false);
+  };
+
+  const handleBulkUpload = async (files: FileList) => {
+    setBulkUploading(true);
+    setBulkProgress({ current: 0, total: files.length });
+    
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Date.now()}-${i}.${fileExt}`;
+      const isVideo = file.type.startsWith("video/");
+
+      const { error: uploadError } = await supabase.storage.from("gallery").upload(fileName, file);
+      if (!uploadError) {
+        const { data: { publicUrl } } = supabase.storage.from("gallery").getPublicUrl(fileName);
+        await supabase.from("gallery_media").insert({
+          title: file.name.replace(/\.[^/.]+$/, ""),
+          category: "clinic_tour",
+          media_type: isVideo ? "video" : "image",
+          media_url: publicUrl,
+          is_active: true,
+          display_order: media.length + i,
+        });
+      }
+      setBulkProgress({ current: i + 1, total: files.length });
+    }
+    
+    setBulkUploading(false);
+    toast({ title: "Success", description: `Uploaded ${files.length} files` });
+    fetchMedia();
   };
 
   const toggleActive = async (item: GalleryItem) => {
@@ -262,9 +298,27 @@ const GalleryManagement = () => {
               {imageCount} images • {videoCount} videos
             </p>
           </div>
-          <Button onClick={() => setIsDialogOpen(true)} className="gap-2">
-            <Plus className="w-4 h-4" /> Add Media
-          </Button>
+          <div className="flex gap-2">
+            <label htmlFor="bulk-upload">
+              <Button variant="outline" className="gap-2" asChild disabled={bulkUploading}>
+                <span>
+                  <Images className="w-4 h-4" />
+                  {bulkUploading ? `Uploading ${bulkProgress.current}/${bulkProgress.total}` : "Bulk Upload"}
+                </span>
+              </Button>
+            </label>
+            <input
+              type="file"
+              accept="image/*,video/*"
+              multiple
+              onChange={(e) => e.target.files && handleBulkUpload(e.target.files)}
+              className="hidden"
+              id="bulk-upload"
+            />
+            <Button onClick={() => setIsDialogOpen(true)} className="gap-2">
+              <Plus className="w-4 h-4" /> Add Media
+            </Button>
+          </div>
         </div>
 
         {/* Category Filter Tabs */}

@@ -8,7 +8,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import AIChatWidget from "@/components/chat/AIChatWidget";
 import Index from "./pages/Index";
 import About from "./pages/About";
-import Services from "./pages/Services";
+import ServicesPage from "./pages/Services";
 import Doctors from "./pages/Doctors";
 import Contact from "./pages/Contact";
 import Gallery from "./pages/Gallery";
@@ -21,6 +21,10 @@ import Dashboard from "./pages/admin/Dashboard";
 import StaffManagement from "./pages/admin/StaffManagement";
 import GalleryManagement from "./pages/admin/GalleryManagement";
 import CalendarPage from "./pages/admin/Calendar";
+import Appointments from "./pages/admin/Appointments";
+import Patients from "./pages/admin/Patients";
+import Services from "./pages/admin/Services";
+import Settings from "./pages/admin/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,7 +40,7 @@ const App = () => (
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
+            <Route path="/services" element={<ServicesPage />} />
             <Route path="/doctors" element={<Doctors />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/contact" element={<Contact />} />
@@ -78,6 +82,38 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <CalendarPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/appointments"
+              element={
+                <ProtectedRoute>
+                  <Appointments />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/patients"
+              element={
+                <ProtectedRoute>
+                  <Patients />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/services"
+              element={
+                <ProtectedRoute allowedRoles={["super_admin"]}>
+                  <Services />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/settings"
+              element={
+                <ProtectedRoute allowedRoles={["super_admin"]}>
+                  <Settings />
                 </ProtectedRoute>
               }
             />

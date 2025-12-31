@@ -20,8 +20,16 @@ import {
 import PublicLayout from "@/components/layout/PublicLayout";
 import heroDental from "@/assets/hero-dental.jpg";
 import { useState, useEffect, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
-const heroSlides = [
+interface HeroSlide {
+  image: string;
+  title: string;
+  highlight: string;
+  description: string;
+}
+
+const defaultHeroSlides: HeroSlide[] = [
   {
     image: heroDental,
     title: "Your Smile is Our",
@@ -33,12 +41,6 @@ const heroSlides = [
     title: "Welcome to",
     highlight: "Muhazi Dental Clinic",
     description: "Rwamagana's trusted dental care center. Open 7 days a week from 8 AM to 8 PM for all your dental needs.",
-  },
-  {
-    image: heroDental,
-    title: "Professional Team",
-    highlight: "Expert Dentists",
-    description: "Our experienced dental surgeons and therapists are dedicated to providing you with the highest quality care.",
   },
 ];
 
@@ -91,8 +93,30 @@ const testimonials = [
 ];
 
 const Index = () => {
+  const [heroSlides, setHeroSlides] = useState<HeroSlide[]>(defaultHeroSlides);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  useEffect(() => {
+    const fetchHeroSlides = async () => {
+      const { data } = await supabase
+        .from("gallery_media")
+        .select("media_url, title")
+        .eq("is_hero_slide", true)
+        .eq("is_active", true)
+        .order("display_order");
+      
+      if (data && data.length > 0) {
+        setHeroSlides(data.map((item, i) => ({
+          image: item.media_url,
+          title: i === 0 ? "Your Smile is Our" : "Welcome to",
+          highlight: i === 0 ? "Priority" : "Muhazi Dental Clinic",
+          description: "Experience world-class dental care at Muhazi Dental Clinic with our expert team.",
+        })));
+      }
+    };
+    fetchHeroSlides();
+  }, []);
 
   const nextSlide = useCallback(() => {
     setIsTransitioning(true);
