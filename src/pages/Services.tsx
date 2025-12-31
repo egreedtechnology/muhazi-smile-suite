@@ -22,7 +22,7 @@ const services = [
     title: "General Dentistry",
     description: "Comprehensive oral examinations, professional cleanings, and preventive care to maintain your dental health.",
     features: ["Dental Checkups", "Teeth Cleaning", "X-rays", "Oral Cancer Screening"],
-    price: "From 5,000 RWF",
+    //price: "From 5,000 RWF",
     category: "Routine",
   },
   {
@@ -30,7 +30,7 @@ const services = [
     title: "Dental Fillings",
     description: "Restore damaged teeth with high-quality, tooth-colored composite fillings that blend naturally.",
     features: ["Composite Fillings", "Amalgam Fillings", "Cavity Treatment", "Tooth Restoration"],
-    price: "From 15,000 RWF",
+    //price: "From 15,000 RWF",
     category: "Routine",
   },
   {
@@ -38,7 +38,7 @@ const services = [
     title: "Root Canal Therapy",
     description: "Save infected teeth with painless root canal treatment using modern techniques and anesthesia.",
     features: ["Pain Relief", "Tooth Preservation", "Infection Treatment", "Crown Placement"],
-    price: "From 50,000 RWF",
+  //  price: "From 50,000 RWF",
     category: "Restorative",
   },
   {
@@ -46,7 +46,7 @@ const services = [
     title: "Teeth Whitening",
     description: "Professional whitening treatments for a brighter, more confident smile that lasts.",
     features: ["In-Office Whitening", "Take-Home Kits", "Stain Removal", "Long-lasting Results"],
-    price: "From 30,000 RWF",
+   // price: "From 30,000 RWF",
     category: "Cosmetic",
   },
   {
@@ -54,7 +54,7 @@ const services = [
     title: "Dental Implants",
     description: "Permanent tooth replacement solutions that look, feel, and function like natural teeth.",
     features: ["Single Implants", "Full Arch", "Bone Grafting", "Implant Crowns"],
-    price: "From 300,000 RWF",
+  //  price: "From 300,000 RWF",
     category: "Restorative",
   },
   {
@@ -62,7 +62,7 @@ const services = [
     title: "Crowns & Bridges",
     description: "Custom-made dental crowns and bridges to restore damaged or missing teeth.",
     features: ["Porcelain Crowns", "Dental Bridges", "Crown Replacement", "Tooth Caps"],
-    price: "From 80,000 RWF",
+   // price: "From 80,000 RWF",
     category: "Restorative",
   },
   {
@@ -70,7 +70,7 @@ const services = [
     title: "Tooth Extraction",
     description: "Safe and comfortable tooth removal when necessary, including wisdom teeth.",
     features: ["Simple Extraction", "Surgical Extraction", "Wisdom Teeth", "Post-Op Care"],
-    price: "From 10,000 RWF",
+  //  price: "From 10,000 RWF",
     category: "Emergency",
   },
   {
@@ -78,7 +78,7 @@ const services = [
     title: "Pediatric Dentistry",
     description: "Gentle, child-friendly dental care to establish healthy habits from an early age.",
     features: ["Kids Checkups", "Sealants", "Fluoride Treatment", "Cavity Prevention"],
-    price: "From 5,000 RWF",
+  //  price: "From 5,000 RWF",
     category: "Routine",
   },
 ];
