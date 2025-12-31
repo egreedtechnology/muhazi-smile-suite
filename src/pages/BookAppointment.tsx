@@ -18,12 +18,13 @@ import PublicLayout from "@/components/layout/PublicLayout";
 import { useToast } from "@/hooks/use-toast";
 
 const services = [
-  { id: "general", name: "General Checkup", duration: "30 min", price: "5,000 RWF" },
-  { id: "cleaning", name: "Teeth Cleaning", duration: "45 min", price: "15,000 RWF" },
-  { id: "filling", name: "Dental Filling", duration: "45 min", price: "15,000 RWF" },
-  { id: "whitening", name: "Teeth Whitening", duration: "60 min", price: "30,000 RWF" },
-  { id: "rootcanal", name: "Root Canal", duration: "90 min", price: "50,000 RWF" },
-  { id: "extraction", name: "Tooth Extraction", duration: "30 min", price: "10,000 RWF" },
+  { id: "general", name: "General Checkup", duration: "30 min", /*price: "5,000 RWF"*/ },/**/
+
+  { id: "cleaning", name: "Teeth Cleaning", duration: "45 min"/* price: "15,000 RWF"*/ },
+  { id: "filling", name: "Dental Filling", duration: "45 min" /*price: "15,000 RWF" */},
+  { id: "whitening", name: "Teeth Whitening", duration: "60 min"/* price: "30,000 RWF"*/ },
+  { id: "rootcanal", name: "Root Canal", duration: "90 min"/*, price: "50,000 RWF"*/ },
+  { id: "extraction", name: "Tooth Extraction", duration: "30 min"/*, price: "10,000 RWF"*/ },
 ];
 
 const doctors = [
