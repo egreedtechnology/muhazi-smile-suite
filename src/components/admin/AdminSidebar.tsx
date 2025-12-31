@@ -6,8 +6,6 @@ import {
   Users,
   UserCircle,
   Stethoscope,
-  Receipt,
-  CreditCard,
   BarChart3,
   Settings,
   LogOut,
@@ -23,9 +21,7 @@ const menuItems = [
   { icon: Users, label: "Patients", path: "/admin/patients", roles: ["super_admin", "receptionist", "dentist"] },
   { icon: UserCircle, label: "Staff", path: "/admin/staff", roles: ["super_admin"] },
   { icon: Stethoscope, label: "Services", path: "/admin/services", roles: ["super_admin"] },
-  { icon: Receipt, label: "Invoices", path: "/admin/invoices", roles: ["super_admin", "receptionist", "accountant"] },
-  { icon: CreditCard, label: "Payments", path: "/admin/payments", roles: ["super_admin", "accountant"] },
-  { icon: BarChart3, label: "Reports", path: "/admin/reports", roles: ["super_admin", "accountant"] },
+  { icon: BarChart3, label: "Gallery", path: "/admin/gallery", roles: ["super_admin"] },
   { icon: Settings, label: "Settings", path: "/admin/settings", roles: ["super_admin"] },
 ];
 

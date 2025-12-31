@@ -29,13 +29,13 @@ const heroSlides = [
     description: "Experience world-class dental care at Muhazi Dental Clinic. Our expert team provides comprehensive dental services in a comfortable, modern environment.",
   },
   {
-    image: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=2068&auto=format&fit=crop",
-    title: "Modern Equipment for",
-    highlight: "Better Care",
-    description: "We use state-of-the-art dental technology to ensure precise diagnoses and comfortable treatments for all our patients.",
+    image: "/mdc-logo.jpg",
+    title: "Welcome to",
+    highlight: "Muhazi Dental Clinic",
+    description: "Rwamagana's trusted dental care center. Open 7 days a week from 8 AM to 8 PM for all your dental needs.",
   },
   {
-    image: "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=1974&auto=format&fit=crop",
+    image: heroDental,
     title: "Professional Team",
     highlight: "Expert Dentists",
     description: "Our experienced dental surgeons and therapists are dedicated to providing you with the highest quality care.",

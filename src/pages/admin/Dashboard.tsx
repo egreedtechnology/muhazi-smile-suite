@@ -8,15 +8,12 @@ import { useAuth } from "@/hooks/useAuth";
 import {
   Calendar,
   Users,
-  DollarSign,
   Clock,
   UserPlus,
   CalendarPlus,
-  Receipt,
-  TrendingUp,
+  Image,
   CheckCircle,
   XCircle,
-  AlertCircle,
 } from "lucide-react";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
@@ -24,7 +21,6 @@ import { Link } from "react-router-dom";
 interface DashboardStats {
   todayAppointments: number;
   totalPatients: number;
-  monthlyRevenue: number;
   pendingAppointments: number;
 }
 
@@ -43,7 +39,6 @@ export default function Dashboard() {
   const [stats, setStats] = useState<DashboardStats>({
     todayAppointments: 0,
     totalPatients: 0,
-    monthlyRevenue: 0,
     pendingAppointments: 0,
   });
   const [todaysAppointments, setTodaysAppointments] = useState<Appointment[]>([]);
@@ -92,17 +87,9 @@ export default function Dashboard() {
       .eq("status", "pending");
 
     // Fetch monthly revenue
-    const { data: monthlyPayments } = await supabase
-      .from("payments")
-      .select("amount")
-      .gte("payment_date", startOfMonth);
-
-    const monthlyRevenue = monthlyPayments?.reduce((sum, p) => sum + Number(p.amount), 0) || 0;
-
     setStats({
       todayAppointments: appointments?.length || 0,
       totalPatients: patientsCount || 0,
-      monthlyRevenue,
       pendingAppointments: pendingCount || 0,
     });
 
@@ -185,20 +172,6 @@ export default function Dashboard() {
                 </div>
                 <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center">
                   <Users className="w-6 h-6 text-secondary" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Monthly Revenue</p>
-                  <p className="text-3xl font-bold">{stats.monthlyRevenue.toLocaleString()} RWF</p>
-                </div>
-                <div className="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-green-600" />
                 </div>
               </div>
             </CardContent>
@@ -318,15 +291,15 @@ export default function Dashboard() {
             </Card>
           </Link>
 
-          <Link to="/admin/invoices">
+          <Link to="/admin/gallery">
             <Card className="hover:shadow-md transition-shadow cursor-pointer h-full">
               <CardContent className="p-6 flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center">
-                  <Receipt className="w-6 h-6 text-green-600" />
+                  <Image className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
-                  <p className="font-semibold">Create Invoice</p>
-                  <p className="text-sm text-muted-foreground">Generate a new invoice</p>
+                  <p className="font-semibold">Manage Gallery</p>
+                  <p className="text-sm text-muted-foreground">Upload photos & videos</p>
                 </div>
               </CardContent>
             </Card>
