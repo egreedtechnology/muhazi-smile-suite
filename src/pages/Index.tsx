@@ -13,10 +13,34 @@ import {
   CheckCircle2,
   Star,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 import PublicLayout from "@/components/layout/PublicLayout";
 import heroDental from "@/assets/hero-dental.jpg";
+import { useState, useEffect, useCallback } from "react";
+
+const heroSlides = [
+  {
+    image: heroDental,
+    title: "Your Smile is Our",
+    highlight: "Priority",
+    description: "Experience world-class dental care at Muhazi Dental Clinic. Our expert team provides comprehensive dental services in a comfortable, modern environment.",
+  },
+  {
+    image: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=2068&auto=format&fit=crop",
+    title: "Modern Equipment for",
+    highlight: "Better Care",
+    description: "We use state-of-the-art dental technology to ensure precise diagnoses and comfortable treatments for all our patients.",
+  },
+  {
+    image: "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=1974&auto=format&fit=crop",
+    title: "Professional Team",
+    highlight: "Expert Dentists",
+    description: "Our experienced dental surgeons and therapists are dedicated to providing you with the highest quality care.",
+  },
+];
 
 const services = [
   {
@@ -67,18 +91,92 @@ const testimonials = [
 ];
 
 const Index = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const nextSlide = useCallback(() => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+      setIsTransitioning(false);
+    }, 300);
+  }, []);
+
+  const prevSlide = useCallback(() => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+      setIsTransitioning(false);
+    }, 300);
+  }, []);
+
+  const goToSlide = (index: number) => {
+    if (index !== currentSlide) {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentSlide(index);
+        setIsTransitioning(false);
+      }, 300);
+    }
+  };
+
+  // Auto-slide every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(nextSlide, 5000);
+    return () => clearInterval(interval);
+  }, [nextSlide]);
+
   return (
     <PublicLayout>
-      {/* Hero Section */}
+      {/* Hero Section with Image Carousel */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0">
-          <img 
-            src={heroDental} 
-            alt="Modern dental clinic interior"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-foreground/90 via-foreground/70 to-foreground/40" />
+        {/* Background Images with Transition */}
+        {heroSlides.map((slide, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+              index === currentSlide ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <img 
+              src={slide.image} 
+              alt={`Slide ${index + 1}`}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-foreground/90 via-foreground/70 to-foreground/40" />
+          </div>
+        ))}
+
+        {/* Slide Navigation Arrows */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-primary-foreground/20 backdrop-blur-sm hover:bg-primary-foreground/30 transition-colors text-primary-foreground"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+        <button
+          onClick={nextSlide}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-primary-foreground/20 backdrop-blur-sm hover:bg-primary-foreground/30 transition-colors text-primary-foreground"
+          aria-label="Next slide"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
+
+        {/* Slide Indicators */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+          {heroSlides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                index === currentSlide 
+                  ? "bg-primary w-8" 
+                  : "bg-primary-foreground/50 hover:bg-primary-foreground/70"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
         </div>
 
         <div className="container-custom px-4 relative z-10">
@@ -88,17 +186,24 @@ const Index = () => {
               <span>Trusted Dental Care in Rwanda</span>
             </div>
             
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-primary-foreground mb-6 leading-tight animate-slide-up">
-              Your Smile is Our
-              <span className="block text-primary">Priority</span>
+            <h1 
+              className={`text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-primary-foreground mb-6 leading-tight transition-all duration-300 ${
+                isTransitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
+              }`}
+            >
+              {heroSlides[currentSlide].title}
+              <span className="block text-primary">{heroSlides[currentSlide].highlight}</span>
             </h1>
             
-            <p className="text-lg text-primary-foreground/80 mb-8 max-w-xl animate-slide-up animation-delay-100">
-              Experience world-class dental care at Muhazi Dental Clinic. Our expert team provides 
-              comprehensive dental services in a comfortable, modern environment.
+            <p 
+              className={`text-lg text-primary-foreground/80 mb-8 max-w-xl transition-all duration-300 delay-100 ${
+                isTransitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
+              }`}
+            >
+              {heroSlides[currentSlide].description}
             </p>
 
-            <div className="flex flex-wrap gap-4 animate-slide-up animation-delay-200">
+            <div className="flex flex-wrap gap-4">
               <Button variant="hero" size="xl" asChild>
                 <Link to="/book">
                   <Calendar className="w-5 h-5" />
@@ -114,7 +219,7 @@ const Index = () => {
             </div>
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12 animate-slide-up animation-delay-300">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
               {stats.map((stat, index) => (
                 <div key={index} className="text-center p-4 bg-primary-foreground/10 backdrop-blur-sm rounded-xl border border-primary-foreground/20">
                   <div className="text-2xl sm:text-3xl font-heading font-bold text-primary-foreground">{stat.value}</div>
