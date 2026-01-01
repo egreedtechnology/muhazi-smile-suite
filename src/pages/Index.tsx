@@ -421,7 +421,7 @@ const Index = () => {
               className="bg-primary-foreground text-primary hover:bg-primary-foreground/90"
               asChild
             >
-              <a href="https://wa.me/250787630399" target="_blank" rel="noopener noreferrer">
+              <a href="https://wa.link/x0ap6w" target="_blank" rel="noopener noreferrer">
                 <Phone className="w-5 h-5" />
                 WhatsApp Us
               </a>
