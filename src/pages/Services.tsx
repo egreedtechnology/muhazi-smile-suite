@@ -141,8 +141,7 @@ const Services = () => {
                       </li>
                     ))}
                   </ul>
-                  <div className="pt-4 border-t border-border flex items-center justify-between">
-                    <span className="font-semibold text-primary">{service.price}</span>
+                  <div className="pt-4 border-t border-border flex justify-end">
                     <Button variant="ghost" size="sm" asChild>
                       <Link to="/book">
                         Book Now
