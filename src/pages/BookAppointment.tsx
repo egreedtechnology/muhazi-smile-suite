@@ -156,12 +156,9 @@ const BookAppointment = () => {
                     onClick={() => setSelectedService(service.id)}
                   >
                     <CardContent className="p-4">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="font-semibold">{service.name}</h3>
-                          <p className="text-sm text-muted-foreground">{service.duration}</p>
-                        </div>
-                        <span className="text-primary font-semibold text-sm">{service.price}</span>
+                      <div>
+                        <h3 className="font-semibold">{service.name}</h3>
+                        <p className="text-sm text-muted-foreground">{service.duration}</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -356,12 +353,6 @@ const BookAppointment = () => {
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Time:</span>
                     <span className="font-medium">{selectedTime}</span>
-                  </div>
-                  <div className="flex justify-between pt-2 border-t border-border mt-2">
-                    <span className="text-muted-foreground">Estimated Price:</span>
-                    <span className="font-semibold text-primary">
-                      {services.find(s => s.id === selectedService)?.price}
-                    </span>
                   </div>
                 </div>
               </Card>
