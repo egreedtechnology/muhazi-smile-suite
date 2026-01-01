@@ -19,6 +19,9 @@ import {
 } from "lucide-react";
 import PublicLayout from "@/components/layout/PublicLayout";
 import heroDental from "@/assets/hero-dental.jpg";
+import heroClinicReception from "@/assets/hero-clinic-reception.jpg";
+import heroDentistPatient from "@/assets/hero-dentist-patient.jpg";
+import heroHealthySmile from "@/assets/hero-healthy-smile.jpg";
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -31,16 +34,22 @@ interface HeroSlide {
 
 const defaultHeroSlides: HeroSlide[] = [
   {
-    image: heroDental,
+    image: heroClinicReception,
     title: "Your Smile is Our",
     highlight: "Priority",
     description: "Experience world-class dental care at Muhazi Dental Clinic. Our expert team provides comprehensive dental services in a comfortable, modern environment.",
   },
   {
-    image: "/mdc-logo.jpg",
-    title: "Welcome to",
-    highlight: "Muhazi Dental Clinic",
-    description: "Rwamagana's trusted dental care center. Open 7 days a week from 8 AM to 8 PM for all your dental needs.",
+    image: heroDentistPatient,
+    title: "Expert Care for",
+    highlight: "Your Dental Health",
+    description: "Our skilled dentists provide personalized treatment with the latest techniques and equipment.",
+  },
+  {
+    image: heroHealthySmile,
+    title: "Achieve the Perfect",
+    highlight: "Smile You Deserve",
+    description: "From teeth whitening to complete dental makeovers, we help you achieve the smile of your dreams.",
   },
 ];
 

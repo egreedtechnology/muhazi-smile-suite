@@ -41,15 +41,16 @@ interface Appointment {
   patient_id: string;
   service_id: string | null;
   staff_id: string | null;
-  patient?: { id: string; full_name: string; phone: string };
-  service?: { id: string; name: string };
-  staff?: { id: string; full_name: string };
+  patient?: { id: string; full_name: string; phone: string; email: string | null };
+  service?: { id: string; name: string; duration_minutes: number };
+  staff?: { id: string; full_name: string; specialization: string | null };
 }
 
 interface Patient {
   id: string;
   full_name: string;
   phone: string;
+  email: string | null;
 }
 
 interface Service {
@@ -105,9 +106,9 @@ export default function Appointments() {
     const [appointmentsRes, patientsRes, servicesRes, staffRes] = await Promise.all([
       supabase
         .from("appointments")
-        .select(`*, patient:patients(id, full_name, phone), service:services(id, name), staff:staff(id, full_name)`)
+        .select(`*, patient:patients(id, full_name, phone, email), service:services(id, name, duration_minutes), staff:staff(id, full_name, specialization)`)
         .order("appointment_date", { ascending: false }),
-      supabase.from("patients").select("id, full_name, phone").order("full_name"),
+      supabase.from("patients").select("id, full_name, phone, email").order("full_name"),
       supabase.from("services").select("id, name, duration_minutes").eq("is_active", true),
       supabase.from("staff").select("id, full_name, specialization").eq("is_active", true),
     ]);
@@ -281,6 +282,7 @@ export default function Appointments() {
                     <TableRow>
                       <TableHead>Date & Time</TableHead>
                       <TableHead>Patient</TableHead>
+                      <TableHead>Contact</TableHead>
                       <TableHead>Service</TableHead>
                       <TableHead>Doctor</TableHead>
                       <TableHead>Status</TableHead>
@@ -296,10 +298,26 @@ export default function Appointments() {
                         </TableCell>
                         <TableCell>
                           <div className="font-medium">{appointment.patient?.full_name}</div>
-                          <div className="text-sm text-muted-foreground">{appointment.patient?.phone}</div>
                         </TableCell>
-                        <TableCell>{appointment.service?.name || "-"}</TableCell>
-                        <TableCell>{appointment.staff?.full_name || "Unassigned"}</TableCell>
+                        <TableCell>
+                          <div className="text-sm">{appointment.patient?.phone}</div>
+                          {appointment.patient?.email && (
+                            <div className="text-xs text-muted-foreground">{appointment.patient.email}</div>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <div>{appointment.service?.name || "-"}</div>
+                          {appointment.service?.duration_minutes && (
+                            <div className="text-xs text-muted-foreground">{appointment.service.duration_minutes} min</div>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <div>{appointment.staff?.full_name || "Unassigned"}</div>
+                          {appointment.staff?.specialization && (
+                            <div className="text-xs text-muted-foreground">{appointment.staff.specialization}</div>
+                          )}
+                        </TableCell>
+                        <TableCell>{getStatusBadge(appointment.status)}</TableCell>
                         <TableCell>{getStatusBadge(appointment.status)}</TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-1">
