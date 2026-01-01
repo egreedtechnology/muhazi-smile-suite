@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
-import { Save, Building, Clock, Phone, Mail, MapPin, Globe, Image as ImageIcon, Plus, Trash2, Star } from "lucide-react";
+import { Save, Building, Clock, Phone, Mail, MapPin, Globe, Image as ImageIcon, Plus, Trash2, Star, Share2, Copy, Check, Link as LinkIcon, Facebook, MessageCircle } from "lucide-react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 
@@ -24,6 +22,7 @@ export default function Settings() {
   const [saving, setSaving] = useState(false);
   const [heroSlides, setHeroSlides] = useState<HeroSlide[]>([]);
   const [galleryMedia, setGalleryMedia] = useState<HeroSlide[]>([]);
+  const [copiedLink, setCopiedLink] = useState<string | null>(null);
   
   const [clinicInfo, setClinicInfo] = useState({
     name: "Muhazi Dental Clinic",
@@ -33,6 +32,38 @@ export default function Settings() {
     website: "https://muhazidental.rw",
     openingHours: "Monday - Sunday: 8:00 AM - 8:00 PM",
   });
+
+  // Generate shareable links
+  const baseUrl = window.location.origin;
+  const shareableLinks = {
+    register: `${baseUrl}/patient/register`,
+    book: `${baseUrl}/book`,
+  };
+
+  const copyToClipboard = async (link: string, type: string) => {
+    try {
+      await navigator.clipboard.writeText(link);
+      setCopiedLink(type);
+      toast({ title: "Copied!", description: "Link copied to clipboard" });
+      setTimeout(() => setCopiedLink(null), 2000);
+    } catch (err) {
+      toast({ title: "Error", description: "Failed to copy link", variant: "destructive" });
+    }
+  };
+
+  const shareToWhatsApp = (link: string, message: string) => {
+    const text = encodeURIComponent(`${message}\n${link}`);
+    window.open(`https://wa.me/?text=${text}`, "_blank");
+  };
+
+  const shareToFacebook = (link: string) => {
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`, "_blank");
+  };
+
+  const shareToTwitter = (link: string, message: string) => {
+    const text = encodeURIComponent(message);
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(link)}`, "_blank");
+  };
 
   useEffect(() => {
     fetchHeroSlides();
@@ -84,11 +115,151 @@ export default function Settings() {
           <p className="text-muted-foreground">Manage clinic settings and configurations</p>
         </div>
 
-        <Tabs defaultValue="hero" className="space-y-6">
+        <Tabs defaultValue="share" className="space-y-6">
           <TabsList>
+            <TabsTrigger value="share">Shareable Links</TabsTrigger>
             <TabsTrigger value="hero">Hero Carousel</TabsTrigger>
             <TabsTrigger value="clinic">Clinic Info</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="share" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Share2 className="w-5 h-5" />
+                  Patient Invitation Links
+                </CardTitle>
+                <CardDescription>
+                  Share these links with patients to invite them to register or book appointments.
+                  These links can be shared on social media, WhatsApp, or any messaging platform.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Registration Link */}
+                <div className="p-4 border rounded-lg space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+                      Registration
+                    </Badge>
+                    <span className="text-sm text-muted-foreground">Invite patients to create an account</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <Input
+                      value={shareableLinks.register}
+                      readOnly
+                      className="font-mono text-sm"
+                    />
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => copyToClipboard(shareableLinks.register, "register")}
+                    >
+                      {copiedLink === "register" ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                    </Button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="gap-2"
+                      onClick={() => shareToWhatsApp(shareableLinks.register, "Join Muhazi Dental Clinic! Register here to book your dental appointments:")}
+                    >
+                      <MessageCircle className="w-4 h-4 text-green-600" />
+                      WhatsApp
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="gap-2"
+                      onClick={() => shareToFacebook(shareableLinks.register)}
+                    >
+                      <Facebook className="w-4 h-4 text-blue-600" />
+                      Facebook
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="gap-2"
+                      onClick={() => shareToTwitter(shareableLinks.register, "Join Muhazi Dental Clinic for quality dental care!")}
+                    >
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                      </svg>
+                      X (Twitter)
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Booking Link */}
+                <div className="p-4 border rounded-lg space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="bg-green-500/10 text-green-600 border-green-500/20">
+                      Book Appointment
+                    </Badge>
+                    <span className="text-sm text-muted-foreground">Direct link to appointment booking</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <Input
+                      value={shareableLinks.book}
+                      readOnly
+                      className="font-mono text-sm"
+                    />
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => copyToClipboard(shareableLinks.book, "book")}
+                    >
+                      {copiedLink === "book" ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                    </Button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="gap-2"
+                      onClick={() => shareToWhatsApp(shareableLinks.book, "Book your dental appointment at Muhazi Dental Clinic:")}
+                    >
+                      <MessageCircle className="w-4 h-4 text-green-600" />
+                      WhatsApp
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="gap-2"
+                      onClick={() => shareToFacebook(shareableLinks.book)}
+                    >
+                      <Facebook className="w-4 h-4 text-blue-600" />
+                      Facebook
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="gap-2"
+                      onClick={() => shareToTwitter(shareableLinks.book, "Book your dental appointment at Muhazi Dental Clinic!")}
+                    >
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                      </svg>
+                      X (Twitter)
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="bg-muted/50 p-4 rounded-lg">
+                  <h4 className="font-medium flex items-center gap-2 mb-2">
+                    <LinkIcon className="w-4 h-4" />
+                    Tips for Sharing
+                  </h4>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• Share the registration link with new patients who need to create an account</li>
+                    <li>• Share the booking link for quick appointment scheduling</li>
+                    <li>• You can post these links on your social media pages</li>
+                    <li>• Send via WhatsApp for personal patient invitations</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           <TabsContent value="hero" className="space-y-6">
             <Card>
