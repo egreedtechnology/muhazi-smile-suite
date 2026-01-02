@@ -12,6 +12,7 @@ import {
   Send
 } from "lucide-react";
 import PublicLayout from "@/components/layout/PublicLayout";
+import SEOHead from "@/components/seo/SEOHead";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -100,6 +101,12 @@ const Contact = () => {
 
   return (
     <PublicLayout>
+      <SEOHead 
+        title="Contact Us | Muhazi Dental Clinic"
+        description="Contact Muhazi Dental Clinic in Rwamagana, Rwanda. Call +250 787 630 399 or visit us at 2nd Floor, Above MTN Branch. Open Monday-Sunday 8AM-8PM."
+        canonical="/contact"
+        keywords="contact Muhazi Dental, Rwamagana dentist contact, dental clinic phone, clinic location Rwanda"
+      />
       {/* Hero Section */}
       <section className="section-padding bg-gradient-to-b from-muted to-background">
         <div className="container-custom">

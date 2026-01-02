@@ -18,6 +18,7 @@ import {
   ChevronRight
 } from "lucide-react";
 import PublicLayout from "@/components/layout/PublicLayout";
+import SEOHead from "@/components/seo/SEOHead";
 import heroDental from "@/assets/hero-dental.jpg";
 import heroClinicReception from "@/assets/hero-clinic-reception.jpg";
 import heroDentistPatient from "@/assets/hero-dentist-patient.jpg";
@@ -161,6 +162,11 @@ const Index = () => {
 
   return (
     <PublicLayout>
+      <SEOHead 
+        title="Muhazi Dental Clinic | Quality Dental Care in Rwamagana, Rwanda"
+        description="Muhazi Dental Clinic offers comprehensive dental care in Rwamagana, Rwanda. Book your appointment for teeth cleaning, fillings, root canal, whitening & more. Open 7 days."
+        canonical="/"
+      />
       {/* Hero Section with Image Carousel */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
         {/* Background Images with Transition */}

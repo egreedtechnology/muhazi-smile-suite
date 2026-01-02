@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { X, Play, ChevronLeft, ChevronRight } from "lucide-react";
 import PublicLayout from "@/components/layout/PublicLayout";
+import SEOHead from "@/components/seo/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -140,6 +141,12 @@ const Gallery = () => {
 
   return (
     <PublicLayout>
+      <SEOHead 
+        title="Gallery | Muhazi Dental Clinic"
+        description="View photos and videos of Muhazi Dental Clinic's modern facilities, procedures, and team in action. See our clinic in Rwamagana, Rwanda."
+        canonical="/gallery"
+        keywords="dental clinic photos, Muhazi Dental gallery, clinic facilities, dental procedures, Rwamagana clinic"
+      />
       {/* Hero Section */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-primary/5 to-background">
         <div className="container-custom px-4 text-center">
