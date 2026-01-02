@@ -386,6 +386,45 @@ export type Database = {
           },
         ]
       }
+      messages: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          is_read: boolean
+          message: string
+          phone: string
+          read_at: string | null
+          read_by: string | null
+          subject: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          is_read?: boolean
+          message: string
+          phone: string
+          read_at?: string | null
+          read_by?: string | null
+          subject: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          phone?: string
+          read_at?: string | null
+          read_by?: string | null
+          subject?: string
+        }
+        Relationships: []
+      }
       patient_accounts: {
         Row: {
           created_at: string
