@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Search, Calendar, Clock, User, Trash2, Pencil, CheckCircle, XCircle } from "lucide-react";
+import { Plus, Search, Calendar, Clock, User, Trash2, Pencil, CheckCircle, XCircle, Filter, X } from "lucide-react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { format } from "date-fns";
+import { format, parseISO, isWithinInterval, startOfDay, endOfDay } from "date-fns";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -80,6 +80,11 @@ export default function Appointments() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+  const [timeFrom, setTimeFrom] = useState("");
+  const [timeTo, setTimeTo] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<Appointment | null>(null);
   const [deleteItem, setDeleteItem] = useState<Appointment | null>(null);
@@ -222,11 +227,47 @@ export default function Appointments() {
     }
   };
 
+  const clearFilters = () => {
+    setDateFrom("");
+    setDateTo("");
+    setTimeFrom("");
+    setTimeTo("");
+    setStatusFilter("all");
+    setSearchQuery("");
+  };
+
+  const hasActiveFilters = dateFrom || dateTo || timeFrom || timeTo || statusFilter !== "all" || searchQuery;
+
   const filteredAppointments = appointments.filter((a) => {
     const matchesSearch = a.patient?.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       a.service?.name?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === "all" || a.status === statusFilter;
-    return matchesSearch && matchesStatus;
+    
+    // Date range filter
+    let matchesDateRange = true;
+    if (dateFrom || dateTo) {
+      const appointmentDate = parseISO(a.appointment_date);
+      if (dateFrom && dateTo) {
+        matchesDateRange = isWithinInterval(appointmentDate, {
+          start: startOfDay(parseISO(dateFrom)),
+          end: endOfDay(parseISO(dateTo)),
+        });
+      } else if (dateFrom) {
+        matchesDateRange = appointmentDate >= startOfDay(parseISO(dateFrom));
+      } else if (dateTo) {
+        matchesDateRange = appointmentDate <= endOfDay(parseISO(dateTo));
+      }
+    }
+    
+    // Time range filter
+    let matchesTimeRange = true;
+    if (timeFrom || timeTo) {
+      const appointmentTime = a.appointment_time.slice(0, 5);
+      if (timeFrom && appointmentTime < timeFrom) matchesTimeRange = false;
+      if (timeTo && appointmentTime > timeTo) matchesTimeRange = false;
+    }
+    
+    return matchesSearch && matchesStatus && matchesDateRange && matchesTimeRange;
   });
 
   return (
@@ -244,27 +285,112 @@ export default function Appointments() {
 
         <Card>
           <CardHeader className="pb-4">
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search by patient or service..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
+            <div className="space-y-4">
+              {/* Main search and filter toggle */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by patient or service..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+                <Button 
+                  variant={showFilters ? "secondary" : "outline"} 
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="gap-2"
+                >
+                  <Filter className="w-4 h-4" />
+                  Filters
+                  {hasActiveFilters && (
+                    <Badge variant="secondary" className="ml-1 bg-primary text-primary-foreground">
+                      Active
+                    </Badge>
+                  )}
+                </Button>
               </div>
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-[150px]">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  {statusOptions.map((s) => (
-                    <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+
+              {/* Expandable filters */}
+              {showFilters && (
+                <div className="p-4 bg-muted/50 rounded-lg space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                    {/* Date From */}
+                    <div>
+                      <Label className="text-sm font-medium mb-1.5 block">Date From</Label>
+                      <Input
+                        type="date"
+                        value={dateFrom}
+                        onChange={(e) => setDateFrom(e.target.value)}
+                        className="w-full"
+                      />
+                    </div>
+                    
+                    {/* Date To */}
+                    <div>
+                      <Label className="text-sm font-medium mb-1.5 block">Date To</Label>
+                      <Input
+                        type="date"
+                        value={dateTo}
+                        onChange={(e) => setDateTo(e.target.value)}
+                        className="w-full"
+                      />
+                    </div>
+                    
+                    {/* Time From */}
+                    <div>
+                      <Label className="text-sm font-medium mb-1.5 block">Time From</Label>
+                      <Input
+                        type="time"
+                        value={timeFrom}
+                        onChange={(e) => setTimeFrom(e.target.value)}
+                        className="w-full"
+                      />
+                    </div>
+                    
+                    {/* Time To */}
+                    <div>
+                      <Label className="text-sm font-medium mb-1.5 block">Time To</Label>
+                      <Input
+                        type="time"
+                        value={timeTo}
+                        onChange={(e) => setTimeTo(e.target.value)}
+                        className="w-full"
+                      />
+                    </div>
+                    
+                    {/* Status */}
+                    <div>
+                      <Label className="text-sm font-medium mb-1.5 block">Status</Label>
+                      <Select value={statusFilter} onValueChange={setStatusFilter}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="All Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Status</SelectItem>
+                          {statusOptions.map((s) => (
+                            <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  
+                  {/* Filter actions */}
+                  <div className="flex justify-between items-center pt-2">
+                    <p className="text-sm text-muted-foreground">
+                      Showing {filteredAppointments.length} of {appointments.length} appointments
+                    </p>
+                    {hasActiveFilters && (
+                      <Button variant="ghost" size="sm" onClick={clearFilters} className="gap-1">
+                        <X className="w-3 h-3" />
+                        Clear Filters
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </CardHeader>
           <CardContent>
@@ -317,7 +443,6 @@ export default function Appointments() {
                             <div className="text-xs text-muted-foreground">{appointment.staff.specialization}</div>
                           )}
                         </TableCell>
-                        <TableCell>{getStatusBadge(appointment.status)}</TableCell>
                         <TableCell>{getStatusBadge(appointment.status)}</TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-1">
