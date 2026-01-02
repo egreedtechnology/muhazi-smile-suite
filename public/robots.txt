@@ -10,5 +10,15 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
+User-agent: LinkedInBot
+Allow: /
+
 User-agent: *
 Allow: /
+
+# Sitemap
+Sitemap: https://muhazidental.rw/sitemap.xml
+
+# Disallow admin and patient portal pages
+Disallow: /admin
+Disallow: /patient

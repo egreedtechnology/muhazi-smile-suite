@@ -13,6 +13,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import PublicLayout from "@/components/layout/PublicLayout";
+import SEOHead from "@/components/seo/SEOHead";
 
 const values = [
   {
@@ -40,6 +41,11 @@ const values = [
 const About = () => {
   return (
     <PublicLayout>
+      <SEOHead 
+        title="About Us | Muhazi Dental Clinic"
+        description="Learn about Muhazi Dental Clinic's mission, values, and experienced team. Providing quality dental care in Rwamagana, Rwanda since our founding."
+        canonical="/about"
+      />
       {/* Hero Section */}
       <section className="section-padding bg-gradient-to-b from-muted to-background">
         <div className="container-custom">

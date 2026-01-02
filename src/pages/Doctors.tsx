@@ -8,6 +8,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import PublicLayout from "@/components/layout/PublicLayout";
+import SEOHead from "@/components/seo/SEOHead";
 
 const doctors = [
   {
@@ -42,6 +43,12 @@ const doctors = [
 const Doctors = () => {
   return (
     <PublicLayout>
+      <SEOHead 
+        title="Our Dentists | Muhazi Dental Clinic"
+        description="Meet our experienced dental professionals at Muhazi Dental Clinic in Rwamagana, Rwanda. Expert care from qualified dentists."
+        canonical="/doctors"
+        keywords="dentist Rwamagana, dental experts Rwanda, Dr. Emmanuel Habimana, dental team, Muhazi Dental"
+      />
       {/* Hero Section */}
       <section className="section-padding bg-gradient-to-b from-muted to-background">
         <div className="container-custom">

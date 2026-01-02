@@ -15,6 +15,7 @@ import {
   Check
 } from "lucide-react";
 import PublicLayout from "@/components/layout/PublicLayout";
+import SEOHead from "@/components/seo/SEOHead";
 
 const services = [
   {
@@ -88,6 +89,12 @@ const categories = ["All", "Routine", "Cosmetic", "Restorative", "Emergency"];
 const Services = () => {
   return (
     <PublicLayout>
+      <SEOHead 
+        title="Dental Services | Muhazi Dental Clinic"
+        description="Explore our comprehensive dental services: teeth cleaning, fillings, root canal, whitening, implants, and pediatric dentistry in Rwamagana, Rwanda."
+        canonical="/services"
+        keywords="dental services, teeth cleaning, dental fillings, root canal, teeth whitening, dental implants, pediatric dentistry, Rwamagana, Rwanda"
+      />
       {/* Hero Section */}
       <section className="section-padding bg-gradient-to-b from-muted to-background">
         <div className="container-custom">
