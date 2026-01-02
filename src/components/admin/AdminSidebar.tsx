@@ -10,6 +10,7 @@ import {
   Settings,
   LogOut,
   Menu,
+  MessageSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -19,6 +20,7 @@ const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/admin/dashboard", roles: ["super_admin", "receptionist", "dentist", "accountant"] },
   { icon: Calendar, label: "Appointments", path: "/admin/appointments", roles: ["super_admin", "receptionist", "dentist"] },
   { icon: Users, label: "Patients", path: "/admin/patients", roles: ["super_admin", "receptionist", "dentist"] },
+  { icon: MessageSquare, label: "Messages", path: "/admin/messages", roles: ["super_admin", "receptionist"] },
   { icon: UserCircle, label: "Staff", path: "/admin/staff", roles: ["super_admin"] },
   { icon: Stethoscope, label: "Services", path: "/admin/services", roles: ["super_admin"] },
   { icon: BarChart3, label: "Gallery", path: "/admin/gallery", roles: ["super_admin"] },

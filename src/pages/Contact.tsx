@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,6 +14,7 @@ import {
 import PublicLayout from "@/components/layout/PublicLayout";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const contactInfo = [
   {
@@ -55,16 +55,47 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    toast({
-      title: "Message Sent!",
-      description: "We'll get back to you as soon as possible.",
+    const formData = new FormData(e.currentTarget);
+    const full_name = (formData.get("name") as string).trim();
+    const phone = (formData.get("phone") as string).trim();
+    const email = (formData.get("email") as string)?.trim() || null;
+    const subject = (formData.get("subject") as string).trim();
+    const message = (formData.get("message") as string).trim();
+
+    // Basic validation
+    if (!full_name || !phone || !subject || !message) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    const { error } = await supabase.from("messages").insert({
+      full_name,
+      phone,
+      email,
+      subject,
+      message,
     });
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Message Sent!",
+        description: "We'll get back to you as soon as possible.",
+      });
+      (e.target as HTMLFormElement).reset();
+    }
     
     setIsSubmitting(false);
-    (e.target as HTMLFormElement).reset();
   };
 
   return (
@@ -124,25 +155,26 @@ const Contact = () => {
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Your Name</Label>
-                    <Input id="name" placeholder="John Doe" required />
+                    <Input id="name" name="name" placeholder="John Doe" required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone">Phone Number</Label>
-                    <Input id="phone" type="tel" placeholder="+250 7XX XXX XXX" required />
+                    <Input id="phone" name="phone" type="tel" placeholder="+250 7XX XXX XXX" required />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address</Label>
-                  <Input id="email" type="email" placeholder="john@example.com" />
+                  <Input id="email" name="email" type="email" placeholder="john@example.com" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="subject">Subject</Label>
-                  <Input id="subject" placeholder="How can we help you?" required />
+                  <Input id="subject" name="subject" placeholder="How can we help you?" required />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="message">Your Message</Label>
                   <Textarea 
                     id="message" 
+                    name="message"
                     placeholder="Tell us more about your inquiry..."
                     className="min-h-[120px]"
                     required

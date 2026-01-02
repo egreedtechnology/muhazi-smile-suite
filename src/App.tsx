@@ -25,6 +25,7 @@ import Appointments from "./pages/admin/Appointments";
 import Patients from "./pages/admin/Patients";
 import Services from "./pages/admin/Services";
 import Settings from "./pages/admin/Settings";
+import Messages from "./pages/admin/Messages";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -114,6 +115,14 @@ const App = () => (
               element={
                 <ProtectedRoute allowedRoles={["super_admin"]}>
                   <Settings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/messages"
+              element={
+                <ProtectedRoute allowedRoles={["super_admin", "receptionist"]}>
+                  <Messages />
                 </ProtectedRoute>
               }
             />
