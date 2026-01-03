@@ -17,6 +17,7 @@ import {
 import PublicLayout from "@/components/layout/PublicLayout";
 import SEOHead from "@/components/seo/SEOHead";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const services = [
   { id: "general", name: "General Checkup", duration: "30 min", /*price: "5,000 RWF"*/ },/**/
@@ -57,16 +58,70 @@ const BookAppointment = () => {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
     
-    toast({
-      title: "Appointment Booked!",
-      description: "We'll send you a confirmation shortly.",
-    });
-    
-    setStep(5); // Success step
-    setIsSubmitting(false);
+    try {
+      // First, create or find the patient
+      const { data: existingPatient, error: findError } = await supabase
+        .from("patients")
+        .select("id")
+        .eq("phone", patientInfo.phone)
+        .maybeSingle();
+
+      let patientId: string;
+
+      if (existingPatient) {
+        patientId = existingPatient.id;
+      } else {
+        // Create new patient record
+        const { data: newPatient, error: createPatientError } = await supabase
+          .from("patients")
+          .insert({
+            full_name: patientInfo.name,
+            phone: patientInfo.phone,
+            email: patientInfo.email || null,
+          })
+          .select("id")
+          .single();
+
+        if (createPatientError) throw createPatientError;
+        patientId = newPatient.id;
+      }
+
+      // Get service details for duration
+      const selectedServiceData = services.find(s => s.id === selectedService);
+      const durationMinutes = selectedServiceData?.duration ? 
+        parseInt(selectedServiceData.duration) : 30;
+
+      // Create the appointment
+      const { error: appointmentError } = await supabase
+        .from("appointments")
+        .insert({
+          patient_id: patientId,
+          appointment_date: selectedDate,
+          appointment_time: selectedTime,
+          notes: patientInfo.notes || null,
+          status: "pending",
+          duration_minutes: durationMinutes,
+        });
+
+      if (appointmentError) throw appointmentError;
+
+      toast({
+        title: "Appointment Booked!",
+        description: "We'll send you a confirmation shortly.",
+      });
+      
+      setStep(5); // Success step
+    } catch (error: any) {
+      console.error("Booking error:", error);
+      toast({
+        title: "Booking Failed",
+        description: error.message || "Something went wrong. Please try again or contact us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const canProceed = () => {

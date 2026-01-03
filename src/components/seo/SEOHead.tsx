@@ -13,12 +13,12 @@ const SEOHead = ({
   title,
   description,
   canonical,
-  ogImage = "https://storage.googleapis.com/gpt-engineer-file-uploads/70Oyqk3yS1aqTxNNtCZfKFXH8aC2/social-images/social-1767276802028-muhazi dc in previewing.png",
+  ogImage = "https://muhazidentalclinic.org/mdc-logo.jpg",
   keywords = "dental clinic, dentist, Rwamagana, Rwanda, teeth cleaning, dental care, root canal, teeth whitening, dental implants",
   type = "website",
 }: SEOHeadProps) => {
   const fullTitle = title.includes("Muhazi") ? title : `${title} | Muhazi Dental Clinic`;
-  const siteUrl = "https://muhazidental.rw";
+  const siteUrl = "https://muhazidentalclinic.org";
   const canonicalUrl = canonical ? `${siteUrl}${canonical}` : siteUrl;
 
   useEffect(() => {
