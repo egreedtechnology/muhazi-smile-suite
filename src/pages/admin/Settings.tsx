@@ -27,9 +27,9 @@ export default function Settings() {
   const [clinicInfo, setClinicInfo] = useState({
     name: "Muhazi Dental Clinic",
     phone: "+250 787 630 399",
-    email: "info@muhazidental.rw",
+    email: "muhazidentalclinic@gmail.com",
     address: "Rwamagana, Eastern Province, Rwanda",
-    website: "https://muhazidental.rw",
+    website: "https://muhazidentalclinic.org",
     openingHours: "Monday - Sunday: 8:00 AM - 8:00 PM",
   });
 
