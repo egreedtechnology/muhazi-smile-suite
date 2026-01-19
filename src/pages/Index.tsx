@@ -36,20 +36,20 @@ interface HeroSlide {
 const defaultHeroSlides: HeroSlide[] = [
   {
     image: heroClinicReception,
-    title: "Your Smile is Our",
-    highlight: "Priority",
+    title: "Exellent in Dentist",
+    highlight: " Your Smile is Our  Priority",
     description: "Experience world-class dental care at Muhazi Dental Clinic. Our expert team provides comprehensive dental services in a comfortable, modern environment.",
   },
   {
     image: heroDentistPatient,
-    title: "Expert Care for",
-    highlight: "Your Dental Health",
+    title: "Exellent in Dentist",
+    highlight: "Expert Care for   Your Dental Health",
     description: "Our skilled dentists provide personalized treatment with the latest techniques and equipment.",
   },
   {
     image: heroHealthySmile,
-    title: "Achieve the Perfect",
-    highlight: "Smile You Deserve",
+    title: "Exellent in Dentist",
+    highlight: "Achieve the Perfect  Smile You Deserve",
     description: "From teeth whitening to complete dental makeovers, we help you achieve the smile of your dreams.",
   },
 ];
@@ -92,7 +92,7 @@ const testimonials = [
   },
   {
     name: "Grace U.",
-    text: "I was nervous about my root canal but Dr. Emmanuel made me feel comfortable throughout the procedure. Thank you!",
+    text: "I was nervous about my root canal but Dr. Evode made me feel comfortable throughout the procedure. Thank you!",
     rating: 5,
   },
   {
@@ -119,8 +119,8 @@ const Index = () => {
       if (data && data.length > 0) {
         setHeroSlides(data.map((item, i) => ({
           image: item.media_url,
-          title: i === 0 ? "Your Smile is Our" : "Welcome to",
-          highlight: i === 0 ? "Priority" : "Muhazi Dental Clinic",
+          title: i === 0 ? "Exellent in Dentist" : "Welcome to",
+          highlight: i === 0 ? "Your Smile is Our  Priority" : "Muhazi Dental Clinic",
           description: "Experience world-class dental care at Muhazi Dental Clinic with our expert team.",
         })));
       }
@@ -163,7 +163,7 @@ const Index = () => {
   return (
     <PublicLayout>
       <SEOHead 
-        title="Muhazi Dental Clinic | Quality Dental Care in Rwamagana, Rwanda"
+        title="Muhazi Dental Clinic | Exellent in  Dentist Care in Rwamagana, Rwanda"
         description="Muhazi Dental Clinic offers comprehensive dental care in Rwamagana, Rwanda. Book your appointment for teeth cleaning, fillings, root canal, whitening & more. Open 7 days."
         canonical="/"
       />
