@@ -30,9 +30,9 @@ const services = [
 ];
 
 const doctors = [
-  { id: "emmanuel", name: "Dr. Emmanuel Habimana", specialty: "General & Cosmetic" },
-  { id: "grace", name: "Dr. Grace Uwimana", specialty: "Endodontics" },
-  { id: "patrick", name: "Dr. Patrick Nshimiyimana", specialty: "Oral Surgery" },
+  { id: "Evode", name: "Dr. Evode habineza", specialty: "Lead Dentist & Clinic Director" },
+  { id: "Jeanette", name: "Jeanette Uwamariya", specialty: "Dental Assistant" },
+  { id: "Samuel", name: "Dr. Samuel Niyonkuru", specialty: "BDS" },
 ];
 
 const timeSlots = [
@@ -107,7 +107,7 @@ const BookAppointment = () => {
       if (appointmentError) throw appointmentError;
 
       toast({
-        title: "Appointment Booked!",
+        title: "Appointment Booked!✔✔",
         description: "We'll send you a confirmation shortly.",
       });
       
