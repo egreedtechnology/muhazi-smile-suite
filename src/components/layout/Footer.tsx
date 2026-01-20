@@ -93,6 +93,7 @@ const Footer = () => {
                 { href: "/doctors", label: "Our Doctors" },
                 { href: "/book", label: "Book Appointment" },
                 { href: "/contact", label: "Contact Us" },
+                { href: "/patient", label: "patient login" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -159,7 +160,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-primary-foreground/10">
+      /*<div className="border-t border-primary-foreground/10">
         <div className="container-custom px-4 py-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-primary-foreground/60">
           <p>© {currentYear} Muhazi Dental Clinic. All rights reserved.</p>
           <div className="flex gap-6">
@@ -168,7 +169,44 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
+    </footer>*/
+
+{/* Bottom Bar */}
+<div className="border-t border-primary-foreground/10">
+  <div className="container-custom px-4 py-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-primary-foreground/60">
+    
+    {/* Left */}
+    <p>© {currentYear} Muhazi Dental Clinic. All rights reserved.</p>
+
+    {/* Center */}
+    <div className="flex gap-6">
+      <Link to="/privacy" className="hover:text-primary-foreground transition-colors">
+        Privacy Policy
+      </Link>
+      <Link to="/terms" className="hover:text-primary-foreground transition-colors">
+        Terms of Service
+      </Link>
+    </div>
+
+    {/* Right – Developer Credit */}
+    <p className="text-xs">
+      Website developed by{" "}
+      <a
+        href="https://egreedtech.org"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:text-primary-foreground transition-colors"
+      >
+        Egreed Technology
+      </a>
+    </p>
+
+  </div>
+</div>
+</footer>
+
+
+    
   );
 };
 
