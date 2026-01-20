@@ -93,7 +93,7 @@ const Footer = () => {
                 { href: "/doctors", label: "Our Doctors" },
                 { href: "/book", label: "Book Appointment" },
                 { href: "/contact", label: "Contact Us" },
-                { href: "/patient", label: "patient login" },
+                { href: "/patient/portal", label: "patient login" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
