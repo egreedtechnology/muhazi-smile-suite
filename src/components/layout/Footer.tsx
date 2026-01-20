@@ -160,16 +160,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom Bar */}
-      /*<div className="border-t border-primary-foreground/10">
-        <div className="container-custom px-4 py-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-primary-foreground/60">
-          <p>© {currentYear} Muhazi Dental Clinic. All rights reserved.</p>
-          <div className="flex gap-6">
-            <Link to="/privacy" className="hover:text-primary-foreground transition-colors">Privacy Policy</Link>
-            <Link to="/terms" className="hover:text-primary-foreground transition-colors">Terms of Service</Link>
-          </div>
-        </div>
-      </div>
-    </footer>*/
+      
 
 {/* Bottom Bar */}
 <div className="border-t border-primary-foreground/10">
@@ -190,7 +181,7 @@ const Footer = () => {
 
     {/* Right – Developer Credit */}
     <p className="text-xs">
-      Website developed by{" "}
+       developed by{" "}
       <a
         href="https://egreedtech.org"
         target="_blank"
