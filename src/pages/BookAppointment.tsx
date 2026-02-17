@@ -55,6 +55,42 @@ const BookAppointment = () => {
     notes: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+
+  // Fetch booked slots when date changes
+  const fetchBookedSlots = async (date: string) => {
+    setLoadingSlots(true);
+    setSelectedTime("");
+    try {
+      const { data, error } = await supabase
+        .from("appointments")
+        .select("appointment_time, duration_minutes")
+        .eq("appointment_date", date)
+        .neq("status", "cancelled");
+
+      if (error) throw error;
+
+      // Build list of occupied time slots
+      const occupied: string[] = [];
+      (data || []).forEach((appt) => {
+        const [h, m] = appt.appointment_time.split(":").map(Number);
+        const startMin = h * 60 + m;
+        const dur = appt.duration_minutes || 30;
+        // Mark every 30-min slot that overlaps this appointment
+        for (let t = startMin; t < startMin + dur; t += 30) {
+          const hh = String(Math.floor(t / 60)).padStart(2, "0");
+          const mm = String(t % 60).padStart(2, "0");
+          occupied.push(`${hh}:${mm}`);
+        }
+      });
+      setBookedSlots(occupied);
+    } catch (err) {
+      console.error("Error fetching slots:", err);
+    } finally {
+      setLoadingSlots(false);
+    }
+  };
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
@@ -290,7 +326,11 @@ const BookAppointment = () => {
                   {dates.map((date, i) => (
                     <button
                       key={i}
-                      onClick={() => setSelectedDate(date.toISOString().split('T')[0])}
+                      onClick={() => {
+                        const dateStr = date.toISOString().split('T')[0];
+                        setSelectedDate(dateStr);
+                        fetchBookedSlots(dateStr);
+                      }}
                       className={`flex flex-col items-center min-w-[70px] p-3 rounded-xl border transition-all ${
                         selectedDate === date.toISOString().split('T')[0]
                           ? 'bg-primary text-primary-foreground border-primary'
@@ -312,22 +352,35 @@ const BookAppointment = () => {
               {/* Time Selection */}
               {selectedDate && (
                 <div className="animate-fade-in">
-                  <Label className="text-base font-semibold mb-3 block">Select Time</Label>
+                  <Label className="text-base font-semibold mb-3 block">
+                    Select Time {loadingSlots && <span className="text-muted-foreground text-xs ml-2">Loading availability...</span>}
+                  </Label>
                   <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-                    {timeSlots.map((time) => (
-                      <button
-                        key={time}
-                        onClick={() => setSelectedTime(time)}
-                        className={`p-2 rounded-lg text-sm font-medium border transition-all ${
-                          selectedTime === time
-                            ? 'bg-primary text-primary-foreground border-primary'
-                            : 'bg-card border-border hover:border-primary'
-                        }`}
-                      >
-                        {time}
-                      </button>
-                    ))}
+                    {timeSlots.map((time) => {
+                      const isBooked = bookedSlots.includes(time);
+                      return (
+                        <button
+                          key={time}
+                          onClick={() => !isBooked && setSelectedTime(time)}
+                          disabled={isBooked}
+                          className={`p-2 rounded-lg text-sm font-medium border transition-all ${
+                            isBooked
+                              ? 'bg-muted text-muted-foreground border-border opacity-50 cursor-not-allowed line-through'
+                              : selectedTime === time
+                                ? 'bg-primary text-primary-foreground border-primary'
+                                : 'bg-card border-border hover:border-primary'
+                          }`}
+                        >
+                          {time}
+                        </button>
+                      );
+                    })}
                   </div>
+                  {bookedSlots.length > 0 && (
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Crossed-out times are already booked
+                    </p>
+                  )}
                 </div>
               )}
             </div>
