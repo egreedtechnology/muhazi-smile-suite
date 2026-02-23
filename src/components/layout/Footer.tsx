@@ -180,15 +180,17 @@ const Footer = () => {
     </div>
 
     {/* Right – Developer Credit */}
-    <p className="text-xs">
-       developed by{" "}
+    <p className="text-xs flex items-center gap-1.5">
+      <span>🛠️</span>
+      <span>Developed by</span>
       <a
         href="https://egreedtech.org"
         target="_blank"
         rel="noopener noreferrer"
-        className="hover:text-primary-foreground transition-colors"
+        className="font-semibold text-primary hover:text-primary/80 transition-colors"
+        title="eGreed Technology – Web & Software Development in Rwanda"
       >
-        Egreed Technology
+        eGreed Technology
       </a>
     </p>
 
