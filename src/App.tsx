@@ -26,6 +26,8 @@ import Patients from "./pages/admin/Patients";
 import Services from "./pages/admin/Services";
 import Settings from "./pages/admin/Settings";
 import Messages from "./pages/admin/Messages";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -46,6 +48,8 @@ const App = () => (
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/book" element={<BookAppointment />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
             
             {/* Patient Portal Routes */}
             <Route path="/patient/portal" element={<PatientPortal />} />
