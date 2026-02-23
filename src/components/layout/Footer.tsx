@@ -180,17 +180,18 @@ const Footer = () => {
     </div>
 
     {/* Right – Developer Credit */}
-    <p className="text-xs flex items-center gap-1.5">
+    <p className="text-xs flex items-center gap-1.5" itemScope itemType="https://schema.org/Organization">
       <span>🛠️</span>
       <span>Developed by</span>
       <a
         href="https://egreedtech.org"
         target="_blank"
-        rel="noopener noreferrer"
+        rel="author noopener noreferrer"
         className="font-semibold text-primary hover:text-primary/80 transition-colors"
         title="eGreed Technology – Web & Software Development in Rwanda"
+        itemProp="url"
       >
-        eGreed Technology
+        <span itemProp="name">eGreed Technology</span>
       </a>
     </p>
 
