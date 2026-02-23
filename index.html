@@ -107,7 +107,57 @@
 </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Loading Screen -->
+      <div id="app-loader" style="
+        position: fixed; inset: 0; z-index: 9999;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        background: linear-gradient(135deg, hsl(174 62% 40%) 0%, hsl(190 60% 45%) 50%, hsl(174 55% 35%) 100%);
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+      ">
+        <div style="
+          width: 80px; height: 80px; border-radius: 20px;
+          background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+          display: flex; align-items: center; justify-content: center;
+          animation: loaderPulse 2s ease-in-out infinite;
+          box-shadow: 0 0 40px rgba(255,255,255,0.1);
+        ">
+          <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 32px; color: white;">M</span>
+        </div>
+        <div style="margin-top: 24px; display: flex; gap: 6px;">
+          <span class="loader-dot" style="width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.7); animation: loaderBounce 1.4s ease-in-out infinite;"></span>
+          <span class="loader-dot" style="width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.7); animation: loaderBounce 1.4s ease-in-out 0.2s infinite;"></span>
+          <span class="loader-dot" style="width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.7); animation: loaderBounce 1.4s ease-in-out 0.4s infinite;"></span>
+        </div>
+        <p style="margin-top: 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: rgba(255,255,255,0.8); letter-spacing: 2px; text-transform: uppercase;">
+          Muhazi Dental Clinic
+        </p>
+      </div>
+      <style>
+        @keyframes loaderPulse {
+          0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(255,255,255,0.1); }
+          50% { transform: scale(1.08); box-shadow: 0 0 60px rgba(255,255,255,0.2); }
+        }
+        @keyframes loaderBounce {
+          0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+          40% { transform: scale(1); opacity: 1; }
+        }
+      </style>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Hide loader once React mounts
+      const observer = new MutationObserver(() => {
+        const loader = document.getElementById('app-loader');
+        const root = document.getElementById('root');
+        if (root && root.children.length > 1 && loader) {
+          loader.style.opacity = '0';
+          loader.style.visibility = 'hidden';
+          setTimeout(() => loader.remove(), 500);
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.getElementById('root'), { childList: true, subtree: true });
+    </script>
   </body>
 </html>
