@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import PublicLayout from "@/components/layout/PublicLayout";
 import SEOHead from "@/components/seo/SEOHead";
+import BookingGuide from "@/components/booking/BookingGuide";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -183,8 +184,9 @@ const BookAppointment = () => {
         title="Book Appointment | Muhazi Dental Clinic"
         description="Book your dental appointment online at Muhazi Dental Clinic, Rwamagana. Choose from our services including checkups, cleaning, whitening, and more."
         canonical="/book"
-        keywords="book dental appointment, online booking, Rwamagana dentist appointment, schedule dental visit"
+        keywords="book dental appointment, online booking, Rwamagana dentist appointment, schedule dental visit, dental booking Rwanda"
       />
+      <BookingGuide />
       {/* Hero */}
       <section className="py-12 bg-gradient-to-b from-muted to-background">
         <div className="container-custom">

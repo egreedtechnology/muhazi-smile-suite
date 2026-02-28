@@ -22,27 +22,20 @@ const SEOHead = ({
   const canonicalUrl = canonical ? `${siteUrl}${canonical}` : siteUrl;
 
   useEffect(() => {
-    // Update document title
     document.title = fullTitle;
 
-    // Helper function to update or create meta tag
     const updateMeta = (name: string, content: string, property = false) => {
       const selector = property ? `meta[property="${name}"]` : `meta[name="${name}"]`;
       let element = document.querySelector(selector) as HTMLMetaElement;
-      
       if (!element) {
         element = document.createElement("meta");
-        if (property) {
-          element.setAttribute("property", name);
-        } else {
-          element.setAttribute("name", name);
-        }
+        if (property) element.setAttribute("property", name);
+        else element.setAttribute("name", name);
         document.head.appendChild(element);
       }
       element.setAttribute("content", content);
     };
 
-    // Update canonical link
     let canonicalLink = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
     if (!canonicalLink) {
       canonicalLink = document.createElement("link");
@@ -51,11 +44,8 @@ const SEOHead = ({
     }
     canonicalLink.setAttribute("href", canonicalUrl);
 
-    // Update meta tags
     updateMeta("description", description);
     updateMeta("keywords", keywords);
-
-    // Open Graph tags
     updateMeta("og:title", fullTitle, true);
     updateMeta("og:description", description, true);
     updateMeta("og:url", canonicalUrl, true);
@@ -63,21 +53,37 @@ const SEOHead = ({
     updateMeta("og:type", type, true);
     updateMeta("og:site_name", "Muhazi Dental Clinic", true);
     updateMeta("og:locale", "en_RW", true);
-
-    // Twitter Card tags
     updateMeta("twitter:card", "summary_large_image");
     updateMeta("twitter:title", fullTitle);
     updateMeta("twitter:description", description);
     updateMeta("twitter:image", ogImage);
     updateMeta("twitter:site", "@muhazidc");
-
-    // Additional SEO meta tags
     updateMeta("robots", "index, follow");
     updateMeta("author", "Muhazi Dental Clinic");
     updateMeta("geo.region", "RW-02");
     updateMeta("geo.placename", "Rwamagana");
 
-  }, [fullTitle, description, canonicalUrl, ogImage, keywords, type]);
+    // BreadcrumbList structured data for inner pages
+    if (canonical && canonical !== "/") {
+      const breadcrumbId = "seo-breadcrumb-ld";
+      let breadcrumbScript = document.getElementById(breadcrumbId) as HTMLScriptElement;
+      if (!breadcrumbScript) {
+        breadcrumbScript = document.createElement("script");
+        breadcrumbScript.id = breadcrumbId;
+        breadcrumbScript.type = "application/ld+json";
+        document.head.appendChild(breadcrumbScript);
+      }
+      const pageName = title.split("|")[0].trim();
+      breadcrumbScript.textContent = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": siteUrl },
+          { "@type": "ListItem", "position": 2, "name": pageName, "item": canonicalUrl },
+        ],
+      });
+    }
+  }, [fullTitle, description, canonicalUrl, ogImage, keywords, type, canonical]);
 
   return null;
 };
